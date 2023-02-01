@@ -10,7 +10,7 @@ const CategoryItem = ({data, onPress}) => {
 
   return (
     <TouchableOpacity style={[styles.container, backgroundSelectedStyle]} onPress={onPressCategory}>
-      <Text style={textSelectedStyle}>{data.name}</Text>
+      <Text style={textSelectedStyle}>{data.category}</Text>
     </TouchableOpacity>
   )
 }

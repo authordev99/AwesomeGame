@@ -14,22 +14,18 @@ import {
 
 import CategoryItem from "./components/CategoryItem";
 import { useNavigation } from "@react-navigation/native";
+import { gameData } from "./data";
 
 
 function Home() {
   const navigation = useNavigation();
-  const items = [
-    {name: "Cities", isSelected: false},
-    {name: "Animals", isSelected: false},
-    {name: "Food", isSelected: false}
-  ];
-  const [data, setData] = useState(items);
+  const [data, setData] = useState(gameData);
 
 
-  const onPressCategory = (item) => {
-    const updatedData = data.map((category)=>{
-      category.isSelected = category.name === item.name
-      return category
+  const onPressCategory = (itemSelected) => {
+    const updatedData = data.map((item)=>{
+      item.isSelected = item.id === itemSelected.id
+      return item
     })
     setData(updatedData)
   }
@@ -38,7 +34,9 @@ function Home() {
     const selectedCategory = data.find((item) => item.isSelected )
     console.log(selectedCategory)
 
-    navigation.navigate("Game");
+    navigation.navigate("Game", {
+      category: selectedCategory
+    });
   }
 
   return (
