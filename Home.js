@@ -39,6 +39,10 @@ function Home() {
     });
   }
 
+  const onPressLeaderboardsButton = () => {
+    navigation.navigate("Leaderboards");
+  }
+
   return (
     <SafeAreaView style={{justifyContent: 'center', flex: 1,}}>
       <Text style={styles.title}>Words Puzzle</Text>
@@ -47,6 +51,10 @@ function Home() {
       })}
       <TouchableOpacity style={{borderWidth: 1, borderRadius: 8, margin: 48, alignItems: 'center', padding: 16}} onPress={onPressStartButton}>
         <Text style={{textTransform:'uppercase'}}>start</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={{borderWidth: 1, borderRadius: 8, marginHorizontal: 48, alignItems: 'center', padding: 16}} onPress={onPressLeaderboardsButton}>
+        <Text style={{textTransform:'uppercase'}}>Leaderboards</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

@@ -71,10 +71,10 @@ function Game({route, navigation}) {
 
   const onPressButton = () => {
     const selectedAnswer = getSelectedAnswer();
+    const nextIndex = currentIndex + 1;
     if (isShowScore)
     {
       setShowScore(false);
-      const nextIndex = currentIndex + 1;
       if (nextIndex < category.questions.length)
       {
         setCurrentIndex(nextIndex)
@@ -94,14 +94,12 @@ function Game({route, navigation}) {
       } else {
         console.warn("SKIP")
       }
+      console.log(currentIndex+" "+category.questions.length)
+      if (nextIndex === category.questions.length)
+      {
+        navigation.goBack();
+      }
     }
-
-
-
-  }
-
-  const onPressNextScore = () =>{
-
   }
 
   const getCurrentEmptyIndex = () => {
