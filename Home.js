@@ -9,7 +9,7 @@ import React, { useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
-  Text, TouchableOpacity
+  Text, TextInput, TouchableOpacity, View,
 } from "react-native";
 
 import CategoryItem from "./components/CategoryItem";
@@ -34,7 +34,7 @@ function Home() {
     const selectedCategory = data.find((item) => item.isSelected )
     console.log(selectedCategory)
 
-    navigation.navigate("Game", {
+    navigation.navigate("Username", {
       category: selectedCategory
     });
   }
@@ -45,6 +45,7 @@ function Home() {
 
   return (
     <SafeAreaView style={{justifyContent: 'center', flex: 1,}}>
+
       <Text style={styles.title}>Words Puzzle</Text>
       {data?.map((data, index)=>{
         return  <CategoryItem key={index} data={data} onPress={onPressCategory}/>;
@@ -53,9 +54,26 @@ function Home() {
         <Text style={{textTransform:'uppercase'}}>start</Text>
       </TouchableOpacity>
 
+
+
+
       <TouchableOpacity style={{borderWidth: 1, borderRadius: 8, marginHorizontal: 48, alignItems: 'center', padding: 16}} onPress={onPressLeaderboardsButton}>
         <Text style={{textTransform:'uppercase'}}>Leaderboards</Text>
       </TouchableOpacity>
+
+      {/*<View style={{*/}
+      {/*  backgroundColor: '#ffffff',*/}
+      {/*  borderWidth: 1,*/}
+      {/*  borderRadius: 8,*/}
+      {/*  justifyContent: 'center',*/}
+      {/*  alignItems: 'center',*/}
+      {/*  ...StyleSheet.absoluteFill,*/}
+      {/*}}>*/}
+      {/*  <TextInput style={{paddingVertical: 16}} placeholder={"username"}/>*/}
+      {/*  <TouchableOpacity onPress={onPressLeaderboardsButton}>*/}
+      {/*    <Text style={{textTransform:'uppercase'}}>ENTER</Text>*/}
+      {/*  </TouchableOpacity>*/}
+      {/*</View>*/}
     </SafeAreaView>
   );
 }

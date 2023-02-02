@@ -13,17 +13,23 @@ import {
 } from "react-native";
 
 import { shuffle } from "../utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 function Game({route, navigation}) {
 
-  const { category } = route.params;
+  const { category, username } = route.params;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answer, setAnswer] = useState(null);
   const [optionList, setOptionList] = useState(null)
   const [currentAnswer, setCurrentAnswer] = useState(null)
   const [score, setScore] = useState(0)
   const [isShowScore, setShowScore] = useState(false);
+  const [result, setResult] = useState({
+    skip: 0,
+    correct: 0,
+    wrong: 0,
+  });
 
   useEffect(()=>{
     const questions = category.questions[currentIndex];
@@ -69,36 +75,63 @@ function Game({route, navigation}) {
     }
   }
 
-  const onPressButton = () => {
+  const onPressButton = async () => {
     const selectedAnswer = getSelectedAnswer();
     const nextIndex = currentIndex + 1;
-    if (isShowScore)
-    {
-      setShowScore(false);
-      if (nextIndex < category.questions.length)
-      {
-        setCurrentIndex(nextIndex)
-      }else{
+    let updatedScore = score;
+    let updateResult = {}
 
-      }
+
+    if (isShowScore) {
+      setShowScore(false);
+      goToNext(nextIndex)
+
+
     } else {
-      if (selectedAnswer?.length === answer?.length)
-      {
-        if (selectedAnswer === answer){
-          console.warn("selectedValue = ","BETUL")
-          setScore(score + 100)
+      if (selectedAnswer?.length === answer?.length) {
+        if (selectedAnswer === answer) {
+          console.warn("selectedValue = ", "BETUL")
+          updateResult = { correct: result.correct + 1 }
+          updatedScore += 100
+          setScore(updatedScore)
           setShowScore(true);
         } else {
-          console.warn("selectedValue = ","SALAH")
+          console.warn("selectedValue = ", "SALAH")
+          updateResult = { wrong: result.wrong + 1 }
+          goToNext(nextIndex)
         }
       } else {
-        console.warn("SKIP")
+        console.warn("SKIP = ", result)
+        updateResult = { skip: result.skip + 1 }
+        goToNext(nextIndex)
       }
-      console.log(currentIndex+" "+category.questions.length)
-      if (nextIndex === category.questions.length)
-      {
-        navigation.goBack();
+      console.log(currentIndex + " " + category.questions.length)
+
+      const finalResult = { ...result, ...updateResult };
+      setResult(finalResult)
+      if (nextIndex === category.questions.length) {
+        const summary = {
+          username: username,
+          finalScore: updatedScore,
+          totalQuestion: category.questions.length,
+          category: category.name,
+          ...finalResult
+        }
+        const leaderboardList = JSON.parse(await AsyncStorage.getItem("leaderboards")) ?? []
+        console.log("leaderboardList = ",leaderboardList)
+        leaderboardList?.push(summary)
+        console.log("updatedLeaderboardList = ",leaderboardList)
+        AsyncStorage.setItem("leaderboards", JSON.stringify(leaderboardList)).then(() => {
+          navigation.replace("Result", { data: summary });
+        })
       }
+    }
+  }
+
+  const goToNext = (nextIndex) =>{
+    if (nextIndex < category.questions.length)
+    {
+      setCurrentIndex(nextIndex)
     }
   }
 
