@@ -43,8 +43,11 @@ function Leaderboards({ route, navigation }) {
     console.log("data = ", data);
 
   };
+  const onPress = (data) => {
+    navigation.navigate("Result", { data: data, isFromLeaderboards : true });
+  }
   const renderItem = ({ item, index }) => (
-    <View style={{
+    <TouchableOpacity style={{
       flexDirection: "row",
       flex: 1,
       padding: 20,
@@ -54,9 +57,9 @@ function Leaderboards({ route, navigation }) {
       borderRadius: 8,
       marginHorizontal: 16,
       marginVertical: 8,
-    }}>
+    }} onPress={() => onPress(item)}>
       <Text>{index + 1}</Text>
-      <SpaceFiller width={16} />
+      <SpaceFiller width={24} />
       <View style={{
         height: 50,
         width: 50,
@@ -67,12 +70,12 @@ function Leaderboards({ route, navigation }) {
       }}>
         <Text style={{ color: "white", fontWeight: "bold", fontSize: 16 }}>{item?.username.charAt(0)}</Text>
       </View>
-      <SpaceFiller width={24} />
+      <SpaceFiller width={18} />
       <Text style={{ flex: 1 }}>{item?.username}</Text>
       <View style={{backgroundColor: '#5DBC7D', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 16}}>
         <Text style={{ color: 'white', fontWeight: 'bold' }}>{item?.finalScore}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   function keyExtractor(item, index) {
@@ -85,7 +88,7 @@ function Leaderboards({ route, navigation }) {
         <TouchableOpacity style={{ alignSelf: "flex-start" }} onPress={() => navigation.goBack()}>
           <Image source={require("../images/back.png")} style={{ width: 24, height: 24 }} />
         </TouchableOpacity>
-      } headerCenterElement={<Text style={{ textAlign: "center" }}>Leaderboards</Text>} />
+      } headerCenterElement={<Text style={{ textAlign: "center", fontWeight: 'bold' }}>Leaderboards</Text>} />
       <FlatList
         data={data}
         renderItem={renderItem}

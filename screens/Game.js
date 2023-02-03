@@ -7,7 +7,6 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  Image,
   StyleSheet,
   Text, TouchableOpacity, View,
 } from "react-native";
@@ -16,7 +15,12 @@ import { shuffle } from "../utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "../components/Header";
 import SpaceFiller from "../components/SpaceFiller";
+import CustomButton from "../components/CustomButton";
+import CustomImageButton from "../components/CustomImageButton";
+import CustomText from "../components/CustomTitle";
+import EarnScore from "../components/EarnScore";
 
+const backgroundHeight = 380;
 
 function Game({ route, navigation }) {
 
@@ -32,7 +36,6 @@ function Game({ route, navigation }) {
     correct: 0,
     wrong: 0,
   });
-  const backgroundHeight = 380;
 
   useEffect(() => {
     const questions = category.questions[currentIndex];
@@ -154,48 +157,51 @@ function Game({ route, navigation }) {
     }).join("");
   };
 
+  const goBack = () => {
+    navigation.goBack();
+  };
+
+  const QuestionSection = () => {
+    return (
+      <View style={{ marginHorizontal: 16 }}>
+        <Text style={{ color: "white", fontSize: 16 }}>Question : </Text>
+        <Text style={{
+          color: "white",
+          fontWeight: "bold",
+          fontSize: 20,
+        }}>{category?.questions[currentIndex].question}</Text>
+      </View>
+    );
+  };
+
+  const AnswerBoxes = ({ answerList, onPressItem }) => {
+    return (
+      <View style={styles.answerBoxesContainer}>
+        {answerList?.map((char, index) => {
+          return <TouchableOpacity
+            style={styles.answerBoxContainer}
+            onPress={() => onPressItem(char, index)}>
+            <Text style={styles.answerText}>{char?.value}</Text>
+          </TouchableOpacity>;
+        })}
+      </View>
+    );
+  };
+
   return (
-    <View style={{ justifyContent: "center", flex: 1, backgroundColor: "#efeff3" }}>
-      <View style={{ backgroundColor: "#4a90e2", height: backgroundHeight, ...StyleSheet.absoluteFill }} />
-      <Header headerLeftElement={<Text
-        style={{ color: "white", fontWeight: "bold" }}>{`${currentIndex + 1}/${category.questions.length}`}</Text>}
-              headerRightElement={
-                <TouchableOpacity style={{ alignSelf: "flex-start" }} onPress={() => navigation.goBack()}>
-                  <Image source={require("../images/close.png")}
-                         style={{ width: 24, height: 24, tintColor: "white" }} />
-                </TouchableOpacity>
-              }
-              headerCenterElement={<Text
-                style={{ textAlign: "center", color: "white", fontWeight: "bold" }}>{category.category}</Text>} />
-      <View style={{ flex: 1, margin: 16 }}>
-        {!isShowScore ? <>
-            <View style={{ marginHorizontal: 16 }}>
-              <Text style={{ color: "white", fontSize: 16 }}>Question : </Text>
-              <Text style={{
-                color: "white",
-                fontWeight: "bold",
-                fontSize: 20,
-              }}>{category?.questions[currentIndex].question}</Text>
-            </View>
+    <View style={styles.container}>
+      <View style={styles.customBackground} />
+      <Header
+        headerLeftElement={<Text style={styles.textBold}>{`${currentIndex + 1}/${category.questions.length}`}</Text>}
+        headerRightElement={<CustomImageButton image={require("../images/close.png")} onPress={goBack} />}
+        headerCenterElement={<CustomText text={category.category} />}
+      />
+      <View style={styles.contentContainer}>
+        {!isShowScore ? (
+          <>
+            <QuestionSection />
             <SpaceFiller height={24} />
-            <View style={{ flexDirection: "row", justifyContent: "space-around", flexWrap: "wrap" }}>
-              {currentAnswer?.map((char, index) => {
-                return <TouchableOpacity
-                  style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 8,
-                    marginTop: 16,
-                    marginHorizontal: 8,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "white",
-                  }}
-                  onPress={() => onPressCharacter(char, index)}>
-                  <Text style={{ fontWeight: "bold", fontSize: 20 }}>{char?.value}</Text>
-                </TouchableOpacity>;
-              })}
-            </View>
+            <AnswerBoxes answerList={currentAnswer} onPressItem={onPressCharacter} />
             <SpaceFiller height={backgroundHeight / 3} />
             <View style={{ marginHorizontal: 16 }}>
               <Text style={{
@@ -203,66 +209,52 @@ function Game({ route, navigation }) {
                 fontSize: 20,
               }}>Option : </Text>
             </View>
-            <View style={{ flexDirection: "row", justifyContent: "space-around", flexWrap: "wrap" }}>
-              {optionList?.map((item, index) => {
-                return <TouchableOpacity
-                  style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 8,
-                    marginTop: 16,
-                    marginHorizontal: 8,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "white",
-                  }}
-                  onPress={() => onPressOptionCharacter(item, index)}>
-                  <Text style={{ fontWeight: "bold", fontSize: 20 }}>{item?.value}</Text>
-                </TouchableOpacity>;
-              })}
-            </View>
-          </> :
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <Image source={require('../images/congratulation.png')} style={{width: 100, height: 100}}/>
-            <SpaceFiller height={16} />
-            <Text style={{color: 'white', fontSize: 24, fontWeight: 'bold'}}>{`You earn ${score} point`}</Text>
-          </View>
-        }
+            <AnswerBoxes answerList={optionList} onPressItem={onPressOptionCharacter} />
+          </>
+        ) : (
+          <EarnScore score={score} />
+        )}
         <SpaceFiller height={24} />
-        <TouchableOpacity style={{
-          backgroundColor: getButtonStyle().color,
-          borderRadius: 36,
-          marginHorizontal: 48,
-          alignItems: "center",
-          padding: 16,
-        }} onPress={onPressButton}>
-          <Text
-            style={{ textTransform: "uppercase", fontWeight: "bold", color: "white" }}>{getButtonStyle().title}</Text>
-        </TouchableOpacity>
+        <CustomButton
+          text={getButtonStyle().title}
+          additionalStyles={{ backgroundColor: getButtonStyle().color }}
+          onPress={onPressButton} />
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    justifyContent: "center",
+    flex: 1,
+    backgroundColor: "#efeff3",
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: "600",
+  customBackground: {
+    backgroundColor: "#4a90e2",
+    height: backgroundHeight,
+    ...StyleSheet.absoluteFill,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: "400",
-  },
+  textBold: { color: "white", fontWeight: "bold" },
+  contentContainer: { flex: 1, margin: 16 },
   title: {
     fontWeight: "700",
     alignSelf: "center",
     fontSize: 24,
   },
+  closeButton: { width: 24, height: 24, tintColor: "white" },
+  answerBoxesContainer: { flexDirection: "row", justifyContent: "space-around", flexWrap: "wrap" },
+  answerBoxContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 8,
+    marginTop: 16,
+    marginHorizontal: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+  },
+  answerText: { fontWeight: "bold", fontSize: 20 },
 });
 
 export default Game;

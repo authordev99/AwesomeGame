@@ -7,88 +7,91 @@
 
 import React from "react";
 import {
-  FlatList, Image,
-  SafeAreaView,
+  Image,
   StyleSheet,
   Text, TouchableOpacity, View,
 } from "react-native";
 import Header from "../components/Header";
 import SpaceFiller from "../components/SpaceFiller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import CustomButton from "../components/CustomButton";
 
 
 function Result({ route, navigation }) {
   const insets = useSafeAreaInsets();
-  const { data } = route.params;
+  const { data, isFromLeaderboards } = route.params;
   const image = data.correct === data.totalQuestion ? require("../images/congratulation.png") : require("../images/goodJob.png");
 
   const onPress = () => {
     navigation.replace("Leaderboards");
-  }
+  };
 
   return (
-    <View style={{ justifyContent: "center", flex: 1, backgroundColor: "#4a90e2" }}>
-      <Header headerRightElement={
-        <TouchableOpacity style={{ alignSelf: "flex-start" }} onPress={() => navigation.goBack()}>
-          <Image source={require("../images/close.png")} style={{ width: 24, height: 24, tintColor: 'white' }} />
-        </TouchableOpacity>
-      } />
-      <View style={{ flex: 1, alignItems: "center" }}>
-        <Image source={image} style={{ width: 150, height: 150 }} />
+    <View style={styles.container}>
+      <Header
+        headerRightElement={
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image source={require("../images/close.png")} style={styles.icon} />
+          </TouchableOpacity>
+        } />
+      <View style={styles.contentContainer}>
+        <Image source={image} style={styles.image} />
         <SpaceFiller height={24} />
-        <Text style={{ fontWeight: "bold", color: "white", fontSize: 24 }}>{data.username}</Text>
-        <Text style={{ fontWeight: "bold", color: "white", fontSize: 24 }}>Your total
-          score is <Text>{data.finalScore}</Text></Text>
+        <Text style={styles.text}>{data.username}</Text>
+        <Text style={styles.text}>Your total score is {data.finalScore}</Text>
         <SpaceFiller height={24} />
-        <View style={{ alignSelf: "center", padding: 16 }}>
-          <Text style={{
-            alignSelf: "center",
-            fontWeight: "bold",
-            color: "white",
-            fontSize: 24,
-            textTransform: "uppercase",
-            marginVertical: 16,
-          }}>summary :</Text>
-          <Text style={{
-            fontWeight: "bold",
-            color: "white",
-            fontSize: 16,
-          }}>{`Total Questions : ${data.totalQuestion}`}</Text>
-          <Text style={{
-            fontWeight: "bold",
-            color: "white",
-            fontSize: 16,
-          }}>{`Total Correct Answer : ${data.correct}`}</Text>
-          <Text
-            style={{ fontWeight: "bold", color: "white", fontSize: 16 }}>{`Total Wrong Answer : ${data.wrong}`}</Text>
-          <Text style={{ fontWeight: "bold", color: "white", fontSize: 16 }}>{`Total Skip : ${data.skip}`}</Text>
+        <View style={styles.summaryContainer}>
+          <Text style={styles.summaryText}>summary :</Text>
+          <Text style={[styles.text, { fontSize: 16 }]}>{`Total Questions : ${data.totalQuestion}`}</Text>
+          <Text style={[styles.text, { fontSize: 16 }]}>{`Total Correct Answer : ${data.correct}`}</Text>
+          <Text style={[styles.text, { fontSize: 16 }]}>{`Total Wrong Answer : ${data.wrong}`}</Text>
+          <Text style={[styles.text, { fontSize: 16 }]}>{`Total Skip : ${data.skip}`}</Text>
         </View>
       </View>
-      <TouchableOpacity style={{marginBottom: insets.bottom, backgroundColor: '#5DBC7D', borderRadius: 36, marginHorizontal: 48, alignItems: 'center', padding: 16}} onPress={onPress} >
-        <Text style={{textTransform:'uppercase', fontWeight: 'bold', color: 'white'}}>Leaderboards</Text>
-      </TouchableOpacity>
+      {!isFromLeaderboards && <CustomButton text={"Leaderboards"} onPress={onPress} additionalStyles={{ marginBottom: insets.bottom }}/>}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    justifyContent: "center",
+    flex: 1,
+    backgroundColor: "#4a90e2",
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: "600",
+  icon: {
+    width: 24,
+    height: 24,
+    tintColor: "white",
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: "400",
+  contentContainer: {
+    flex: 1,
+    alignItems: "center"
+  },
+  image: {
+    width: 150,
+    height: 150
   },
   title: {
     fontWeight: "700",
     alignSelf: "center",
     fontSize: 24,
+  },
+  text: {
+    fontWeight: "bold",
+    color: "white",
+    fontSize: 24 },
+  summaryContainer: {
+    alignSelf: "center",
+    padding: 16
+  },
+  summaryText: {
+    alignSelf: "center",
+    fontWeight: "bold",
+    color: "white",
+    fontSize: 24,
+    textTransform: "uppercase",
+    marginVertical: 16,
   },
 });
 
