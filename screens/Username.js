@@ -8,12 +8,11 @@
 import React, { useState } from "react";
 import {
   Alert,
-  FlatList, Image,
-  SafeAreaView,
-  StyleSheet,
-  Text, TextInput, TouchableOpacity, View,
+  StyleSheet, TextInput, View,
 } from "react-native";
 import Header from "../components/Header";
+import CustomButton from "../components/CustomButton";
+import CustomImageButton from "../components/CustomImageButton";
 
 
 function Username({ route, navigation }) {
@@ -36,22 +35,22 @@ function Username({ route, navigation }) {
     console.log("value = ", value);
     setUsername(value);
   };
+
+  const goBack = () => {
+    navigation.goBack();
+  };
+
   return (
-    <View style={{ justifyContent: "center", flex: 1 }}>
+    <View style={styles.container}>
       <Header headerLeftElement={
-        <TouchableOpacity style={{ alignSelf: "flex-start" }} onPress={() => navigation.goBack()}>
-          <Image source={require("../images/back.png")} style={{ width: 24, height: 24 }} />
-        </TouchableOpacity>
+        <CustomImageButton
+          image={require("../images/back.png")}
+          additionalStyles={styles.icon}
+          onPress={goBack} />
       }/>
-      <View style={{ flex: 1, padding: 16 }}>
+      <View style={styles.contentContainer}>
         <TextInput
-          style={{borderRadius: 1,
-            color: "black",
-            fontSize: 30,
-            fontWeight: "bold",
-            height: 100,
-            marginTop: 5,
-            width: "80%",}}
+          style={styles.textInput}
           textAlign="left"
           autoCorrect={false}
           autoFocus={false}
@@ -60,32 +59,35 @@ function Username({ route, navigation }) {
           placeholder={"My name is"}
           onChangeText={onChangeText}
         />
-        <TouchableOpacity style={{backgroundColor: '#5DBC7D', borderRadius: 36, marginHorizontal: 0, alignItems: 'center', padding: 16}} onPress={onPress}>
-          <Text style={{textTransform:'uppercase', fontWeight: 'bold', color: 'white'}}>Let's Go</Text>
-        </TouchableOpacity>
+        <CustomButton text={"Let's Go"} onPress={onPress} additionalStyles={styles.button} />
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    justifyContent: "center",
+    flex: 1
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: "600",
+  contentContainer: {
+    flex: 1,
+    padding: 16
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: "400",
+  icon: {
+    tintColor: 'black'
   },
-  title: {
-    fontWeight: "700",
-    alignSelf: "center",
-    fontSize: 24,
+  button: {
+    marginHorizontal: 0
+  },
+  textInput: {
+    borderRadius: 1,
+    color: "black",
+    fontSize: 30,
+    fontWeight: "bold",
+    height: 100,
+    marginTop: 5,
+    width: "80%",
   },
 });
 

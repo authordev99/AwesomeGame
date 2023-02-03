@@ -3,9 +3,9 @@ import React from "react";
 import SpaceFiller from "./SpaceFiller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const CustomText = ({ text }) => {
+const CustomText = ({ text, additionalStyle }) => {
   return (
-    <Text style={styles.text}>{text}</Text>
+    <Text style={[styles.text, additionalStyle]}>{text}</Text>
   );
 };
 
