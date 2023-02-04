@@ -15,6 +15,7 @@ import Header from "../components/Header";
 import SpaceFiller from "../components/SpaceFiller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CustomButton from "../components/CustomButton";
+import Share from "react-native-share";
 
 
 function Result({ route, navigation }) {
@@ -27,6 +28,21 @@ function Result({ route, navigation }) {
   const onPress = () => {
     navigation.replace("Leaderboards");
   };
+
+  const onShare  = () => {
+    const shareOptions = {
+      title: 'Share file',
+      failOnCancel: false,
+      message: `I have done Word Puzzle Game with total score ${data.finalScore} (Correct: ${data.correct} / ${data.totalQuestion})`,
+    };
+    Share.open(shareOptions)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        err && console.log(err);
+      });
+  }
 
   const goBack = () => {
     navigation.goBack()
@@ -55,7 +71,8 @@ function Result({ route, navigation }) {
           <Text style={[styles.text, { fontSize: 16 }]}>{`Total Skip : ${data.skip}`}</Text>
         </View>
       </View>
-      {!isFromLeaderboards && <CustomButton text={"Leaderboards"} onPress={onPress} additionalStyles={{ marginBottom: insets.bottom }}/>}
+      {!isFromLeaderboards && <CustomButton text={"Leaderboards"} onPress={onPress} additionalStyles={{ marginBottom: 16 }}/>}
+      <CustomButton text={"Share"} onPress={onShare} additionalStyles={{ marginBottom: insets.bottom }}/>
     </View>
   );
 }

@@ -3,7 +3,6 @@ import React from "react";
 import SpaceFiller from "./SpaceFiller";
 
 const LeaderboardItem = ({ item, index, onPress }) => {
-  console.log("item = ",item)
   const onPressItem = () => {
     onPress(item);
   };
