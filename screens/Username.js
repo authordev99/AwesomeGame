@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Alert,
   StyleSheet, TextInput, View,
@@ -13,26 +13,43 @@ import {
 import Header from "../components/Header";
 import CustomButton from "../components/CustomButton";
 import CustomImageButton from "../components/CustomImageButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ContextState } from "../context";
 
 
 function Username({ route, navigation }) {
-  const { category } = route.params;
+  const state = useContext(ContextState);
   const [username, setUsername] = useState("");
 
-  const onPress = () => {
-    if (!username)
-    {
-      Alert.alert("Please enter your name")
+  const onPress = async () => {
+    if (!username) {
+      Alert.alert("Please enter your name");
       return;
     }
-    navigation.replace("Game", {
-      category: category,
-      username: username,
+
+    const userList = JSON.parse(await AsyncStorage.getItem("@userList")) ?? [];
+    let checkUser = userList?.find((item) => {
+      return item.username === username;
+    });
+
+    if (!checkUser) {
+      checkUser = {
+        username: username,
+        score: 0,
+      };
+      console.log("checkUser = ",checkUser)
+      userList?.push(checkUser);
+      console.log("updatedUserList = ",userList)
+      await AsyncStorage.setItem("@userList", JSON.stringify(userList));
+    }
+
+    AsyncStorage.setItem("@user", JSON.stringify(checkUser)).then(() => {
+      state.setUser(checkUser)
+      navigation.goBack();
     });
   };
 
   const onChangeText = (value) => {
-    console.log("value = ", value);
     setUsername(value);
   };
 
@@ -47,7 +64,7 @@ function Username({ route, navigation }) {
           image={require("../images/back.png")}
           additionalStyles={styles.icon}
           onPress={goBack} />
-      }/>
+      } />
       <View style={styles.contentContainer}>
         <TextInput
           style={styles.textInput}
@@ -59,7 +76,7 @@ function Username({ route, navigation }) {
           placeholder={"My name is"}
           onChangeText={onChangeText}
         />
-        <CustomButton text={"Let's Go"} onPress={onPress} additionalStyles={styles.button} />
+        <CustomButton text={"Login"} onPress={onPress} additionalStyles={styles.button} />
       </View>
     </View>
   );
@@ -68,17 +85,17 @@ function Username({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
-    flex: 1
+    flex: 1,
   },
   contentContainer: {
     flex: 1,
-    padding: 16
+    padding: 16,
   },
   icon: {
-    tintColor: 'black'
+    tintColor: "black",
   },
   button: {
-    marginHorizontal: 0
+    marginHorizontal: 0,
   },
   textInput: {
     borderRadius: 1,

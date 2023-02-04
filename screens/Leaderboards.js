@@ -8,14 +8,14 @@
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
-  StyleSheet,
+  StyleSheet, Text,
   View,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "../components/Header";
 import CustomImageButton from "../components/CustomImageButton";
 import CustomText from "../components/CustomTitle";
 import LeaderboardItem from "../components/LeaderboardItem";
+import { getLeaderboardList } from "../utility";
 
 
 function Leaderboards({ route, navigation }) {
@@ -26,16 +26,12 @@ function Leaderboards({ route, navigation }) {
   }, []);
 
   const getData = async () => {
-    const leaderboards = await AsyncStorage.getItem("leaderboards");
-    console.log("leaderboardList = ", leaderboards);
-    const leaderboardList = JSON.parse(leaderboards);
-    const filteredData = leaderboardList?.sort((a, b) => {
+    const leaderboardsList = await getLeaderboardList();
+    const filteredData = leaderboardsList?.sort((a, b) => {
       return b.finalScore - a.finalScore;
     });
 
     setData([...filteredData]);
-    console.log("data = ", data);
-
   };
   const navigateToResultPage = (data) => {
     navigation.navigate("Result", { data: data, isFromLeaderboards: true });
@@ -52,6 +48,14 @@ function Leaderboards({ route, navigation }) {
   function keyExtractor(item, index) {
     return `${item.user}-${index}`;
   }
+
+  const EmptyList = () => {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>No data</Text>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -72,7 +76,9 @@ function Leaderboards({ route, navigation }) {
       <FlatList
         data={data}
         renderItem={renderItem}
-        keyExtractor={keyExtractor} />
+        keyExtractor={keyExtractor}
+        contentContainerStyle={{flex: 1}}
+        ListEmptyComponent={<EmptyList />} />
     </View>
   );
 }

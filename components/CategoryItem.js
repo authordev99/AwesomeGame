@@ -12,10 +12,10 @@ const CategoryItem = ({ data, onPress }) => {
 
   return (
     <TouchableOpacity style={[styles.container, backgroundSelectedStyle]} onPress={onPressCategory}>
-      <View style={{ flexDirection: "row" }}>
-        <Image source={data.image} style={{ width: 60, height: 60 }} />
+      <View style={styles.contentContainer}>
+        <Image source={data.image} style={styles.image} />
         <SpaceFiller width={24} />
-        <View style={{ alignItems: "flex-start", flex: 1, justifyContent: "center" }}>
+        <View style={styles.textContainer}>
           <Text style={[styles.title, textSelectedStyle]}>{data.category}</Text>
           <Text style={[styles.subtitle, textSelectedStyle]}>{`Total ${data.questions.length} questions`}</Text>
         </View>
@@ -34,8 +34,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "white",
   },
+  contentContainer: { flexDirection: "row" },
+  image: { width: 50, height: 50 },
+  textContainer: { alignItems: "flex-start", flex: 1, justifyContent: "center" },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
   },

@@ -3,8 +3,8 @@ import React from "react";
 import SpaceFiller from "./SpaceFiller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const EarnScore = ({ isCorrect, score }) => {
-  const image = isCorrect ? require("../images/congratulation.png") : require("../images/congratulation.png");
+const EarnScore = ({ isAnswerCorrect, score }) => {
+  const image = isAnswerCorrect ? require("../images/congratulation.png") : require("../images/try.png");
   return (
     <View style={styles.container}>
       <Image source={image} style={styles.image} />

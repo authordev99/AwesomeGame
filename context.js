@@ -1,15 +1,27 @@
-import { createContext, useMemo, useState } from "react";
+import { createContext, useState } from "react";
 
 export const ContextState = createContext(null);
 
 function Provider({ children }) {
-  const [state, setState] = useState({});
-  const value = useMemo(
-    () => ({ state, setState }),
-    [state]
-  );
+  const setUser = (user) => {
+    setState({...state, user: user})
+  }
+
+  const resetUser = () => {
+    setState(initState)
+  }
+
+  const initState = {
+    user: null,
+    setUser: setUser,
+    resetUser: resetUser,
+  }
+
+
+  const [state, setState] = useState(initState)
+
   return (
-    <ContextState.Provider value={value}>
+    <ContextState.Provider value={state}>
         {children}
     </ContextState.Provider>
   );

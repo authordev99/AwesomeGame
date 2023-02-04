@@ -1,9 +1,9 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import SpaceFiller from "./SpaceFiller";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const LeaderboardItem = ({ item, index, onPress }) => {
+  console.log("item = ",item)
   const onPressItem = () => {
     onPress(item);
   };
@@ -12,10 +12,10 @@ const LeaderboardItem = ({ item, index, onPress }) => {
       <Text>{index + 1}</Text>
       <SpaceFiller width={24} />
       <View style={styles.imageProfileBackground}>
-        <Text style={styles.firstLetter}>{item?.username.charAt(0)}</Text>
+        <Text style={styles.firstLetter}>{item?.user?.username.charAt(0)}</Text>
       </View>
       <SpaceFiller width={18} />
-      <Text style={styles.usernameContainer}>{item?.username}</Text>
+      <Text style={styles.usernameContainer}>{item?.user?.username}</Text>
       <View style={styles.scoreContainer}>
         <Text style={styles.score}>{item?.finalScore}</Text>
       </View>
@@ -26,7 +26,6 @@ const LeaderboardItem = ({ item, index, onPress }) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    flex: 1,
     padding: 20,
     justifyContent: "center",
     alignItems: "center",

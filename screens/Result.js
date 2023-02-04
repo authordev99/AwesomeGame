@@ -18,26 +18,33 @@ import CustomButton from "../components/CustomButton";
 
 
 function Result({ route, navigation }) {
+
   const insets = useSafeAreaInsets();
   const { data, isFromLeaderboards } = route.params;
+  console.log("data.user.username = ",data.user.username)
   const image = data.correct === data.totalQuestion ? require("../images/congratulation.png") : require("../images/goodJob.png");
 
   const onPress = () => {
     navigation.replace("Leaderboards");
   };
 
+  const goBack = () => {
+    navigation.goBack()
+  }
+
   return (
     <View style={styles.container}>
       <Header
         headerRightElement={
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={goBack}>
             <Image source={require("../images/close.png")} style={styles.icon} />
           </TouchableOpacity>
-        } />
+        }
+      />
       <View style={styles.contentContainer}>
         <Image source={image} style={styles.image} />
         <SpaceFiller height={24} />
-        <Text style={styles.text}>{data.username}</Text>
+        <Text style={styles.text}>{data.user.username}</Text>
         <Text style={styles.text}>Your total score is {data.finalScore}</Text>
         <SpaceFiller height={24} />
         <View style={styles.summaryContainer}>

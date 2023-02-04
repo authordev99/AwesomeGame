@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   StyleSheet,
   Text, TouchableOpacity, View,
@@ -19,11 +19,13 @@ import CustomButton from "../components/CustomButton";
 import CustomImageButton from "../components/CustomImageButton";
 import CustomText from "../components/CustomTitle";
 import EarnScore from "../components/EarnScore";
+import { ContextState } from "../context";
+import { getLeaderboardList, setCurrentUser, setLeaderboardList, updateUserList } from "../utility";
 
 const backgroundHeight = 380;
 
 function Game({ route, navigation }) {
-
+  const state = useContext(ContextState);
   const { category, username } = route.params;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answer, setAnswer] = useState(null);
@@ -31,6 +33,7 @@ function Game({ route, navigation }) {
   const [currentAnswer, setCurrentAnswer] = useState(null);
   const [score, setScore] = useState(0);
   const [isShowScore, setShowScore] = useState(false);
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false);
   const [result, setResult] = useState({
     skip: 0,
     correct: 0,
@@ -79,57 +82,65 @@ function Game({ route, navigation }) {
   };
 
   const onPressButton = async () => {
+    const currentUser = JSON.parse(await AsyncStorage.getItem("@user"));
     const selectedAnswer = getSelectedAnswer();
     const nextIndex = currentIndex + 1;
     let updatedScore = score;
     let updateResult = {};
 
-
     if (isShowScore) {
       setShowScore(false);
       goToNext(nextIndex);
-
-
     } else {
       if (selectedAnswer?.length === answer?.length) {
         if (selectedAnswer === answer) {
-          console.warn("selectedValue = ", "BETUL");
           updateResult = { correct: result.correct + 1 };
           updatedScore += 100;
           setScore(updatedScore);
           setShowScore(true);
+          setIsAnswerCorrect(true);
         } else {
-          console.warn("selectedValue = ", "SALAH");
           updateResult = { wrong: result.wrong + 1 };
-          goToNext(nextIndex);
+          setIsAnswerCorrect(false);
+          setShowScore(true);
         }
       } else {
-        console.warn("SKIP = ", result);
         updateResult = { skip: result.skip + 1 };
         goToNext(nextIndex);
       }
-      console.log(currentIndex + " " + category.questions.length);
 
       const finalResult = { ...result, ...updateResult };
+      const updatedUser = { ...currentUser, score: updatedScore };
       setResult(finalResult);
       if (nextIndex === category.questions.length) {
         const summary = {
-          username: username,
+          user: updatedUser,
           finalScore: updatedScore,
           totalQuestion: category.questions.length,
           category: category.name,
           ...finalResult,
         };
-        const leaderboardList = JSON.parse(await AsyncStorage.getItem("leaderboards")) ?? [];
-        console.log("leaderboardList = ", leaderboardList);
-        leaderboardList?.push(summary);
-        console.log("updatedLeaderboardList = ", leaderboardList);
-        AsyncStorage.setItem("leaderboards", JSON.stringify(leaderboardList)).then(() => {
-          navigation.replace("Result", { data: summary });
-        });
+        const leaderboardList = await getLeaderboardList() ?? [];
+        const isUserExist = leaderboardList?.findIndex((item) => item.user.username === updatedUser.username);
+        if (isUserExist >= 0) {
+          leaderboardList[isUserExist] = summary;
+        } else {
+          leaderboardList?.push(summary);
+        }
+
+        await updateUser(updatedUser);
+        await setLeaderboardList(leaderboardList)
+
+        navigation.replace("Result", { data: summary });
       }
     }
   };
+
+  const updateUser = async (user) => {
+    await updateUserList(user);
+    await setCurrentUser(user)
+    state.setUser(user);
+  }
 
   const goToNext = (nextIndex) => {
     if (nextIndex < category.questions.length) {
@@ -212,7 +223,7 @@ function Game({ route, navigation }) {
             <AnswerBoxes answerList={optionList} onPressItem={onPressOptionCharacter} />
           </>
         ) : (
-          <EarnScore score={score} />
+          <EarnScore isAnswerCorrect={isAnswerCorrect} score={isAnswerCorrect ? 100 : 0} />
         )}
         <SpaceFiller height={24} />
         <CustomButton
