@@ -19,25 +19,22 @@ import { gameData } from "../data";
 import SpaceFiller from "../components/SpaceFiller";
 import CustomButton from "../components/CustomButton";
 import UserSectionItem from "../components/UserSectionItem";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ContextState } from "../context";
-import { removeCurrentUser, removeLocalStorage } from "../utility";
+import { getCurrentUser, removeCurrentUser, removeLocalStorage } from "../utility";
 
 
 function Home() {
   const state = useContext(ContextState);
   const navigation = useNavigation();
   const [data, setData] = useState(gameData);
-  // const [user, setUser] = useState(null)
 
   useEffect(() => {
     getUser();
   },[])
 
   const getUser = async () => {
-    const currentUser = await AsyncStorage.getItem("@user");
-    console.log("currentUser = ",currentUser)
-    state.setUser(JSON.parse(currentUser))
+    const currentUser = await getCurrentUser();
+    state.setUser(currentUser)
   }
 
   const onPressCategory = (itemSelected) => {
@@ -96,7 +93,7 @@ function Home() {
         <SpaceFiller height={16} />
         <CustomButton text={"Leaderboards"} onPress={onPressLeaderboardsButton} />
         {/*<SpaceFiller height={16} />*/}
-        {/*<CustomButton text={"reset"} onPress={removeLocalStorage} />*/}
+        {/*<CustomButton text={"Reset Local Storage"} onPress={removeLocalStorage} />*/}
       </View>
     </SafeAreaView>
   );
