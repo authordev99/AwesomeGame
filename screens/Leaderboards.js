@@ -51,7 +51,7 @@ function Leaderboards({ route, navigation }) {
 
   const EmptyList = () => {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={styles.emptyContainer}>
         <Text>No data</Text>
       </View>
     );
@@ -77,7 +77,7 @@ function Leaderboards({ route, navigation }) {
         data={data}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
-        contentContainerStyle={{flex: 1}}
+        contentContainerStyle={styles.contentContainerStyle}
         ListEmptyComponent={<EmptyList />} />
     </View>
   );
@@ -88,6 +88,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flex: 1,
     backgroundColor: "#efeff3",
+  },
+  contentContainerStyle: {
+    flex: 1,
+  },
+  emptyContainer:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   icon: {
     tintColor: "black",

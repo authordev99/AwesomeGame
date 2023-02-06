@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import SpaceFiller from "./SpaceFiller";
 
@@ -14,9 +14,18 @@ const LeaderboardItem = ({ item, index, onPress }) => {
         <Text style={styles.firstLetter}>{item?.user?.username.charAt(0)}</Text>
       </View>
       <SpaceFiller width={18} />
-      <Text style={styles.usernameContainer}>{item?.user?.username}</Text>
+      <View style={styles.contentContainer}>
+        <Text style={styles.usernameText}>{item?.user?.username}</Text>
+        <SpaceFiller height={4} />
+        <View style={styles.categoryContainer}>
+          <Image source={require('../images/category.png')} style={styles.categoryImage} />
+          <SpaceFiller width={4} />
+          <Text>{`${item?.data?.category}`}</Text>
+        </View>
+
+      </View>
       <View style={styles.scoreContainer}>
-        <Text style={styles.score}>{item?.finalScore}</Text>
+        <Text style={styles.score}>{`${item?.user?.score} pts`}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -42,9 +51,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   firstLetter: { color: "white", fontWeight: "bold", fontSize: 16 },
-  usernameContainer: { flex: 1 },
+  contentContainer: { flex: 1 },
+  usernameText: {  fontWeight: "bold", },
   scoreContainer: { backgroundColor: "#5DBC7D", paddingHorizontal: 16, paddingVertical: 8, borderRadius: 16 },
   score: { color: "white", fontWeight: "bold" },
+  categoryImage: {height: 16, width: 16},
+  categoryContainer: {flexDirection: 'row'},
 });
 
 

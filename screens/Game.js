@@ -55,7 +55,7 @@ function Game({ route, navigation }) {
   }, [currentIndex]);
 
 
-  const onPressCharacter = (character, index) => {
+  const onPressAnswerCharacter = (character, index) => {
     if (character) {
       //set character back to original position in option row
       optionList[character.indexOption] = character;
@@ -117,7 +117,7 @@ function Game({ route, navigation }) {
           user: updatedUser,
           finalScore: updatedScore,
           totalQuestion: category.questions.length,
-          category: category.name,
+          data: category,
           ...finalResult,
         };
         const leaderboardList = await getLeaderboardList() ?? [];
@@ -128,8 +128,10 @@ function Game({ route, navigation }) {
           leaderboardList?.push(summary);
         }
 
+        console.log("summary ", summary)
+
         await updateUser(updatedUser);
-        await setLeaderboardList(leaderboardList)
+        await setLeaderboardList(leaderboardList);
 
         navigation.replace("Result", { data: summary });
       }
@@ -138,9 +140,9 @@ function Game({ route, navigation }) {
 
   const updateUser = async (user) => {
     await updateUserList(user);
-    await setCurrentUser(user)
+    await setCurrentUser(user);
     state.setUser(user);
-  }
+  };
 
   const goToNext = (nextIndex) => {
     if (nextIndex < category.questions.length) {
@@ -174,13 +176,9 @@ function Game({ route, navigation }) {
 
   const QuestionSection = () => {
     return (
-      <View style={{ marginHorizontal: 16 }}>
-        <Text style={{ color: "white", fontSize: 16 }}>Question : </Text>
-        <Text style={{
-          color: "white",
-          fontWeight: "bold",
-          fontSize: 20,
-        }}>{category?.questions[currentIndex].question}</Text>
+      <View style={styles.questionContainer}>
+        <Text style={styles.questionText}>Question : </Text>
+        <Text style={styles.questionGameText}>{category?.questions[currentIndex].question}</Text>
       </View>
     );
   };
@@ -190,6 +188,7 @@ function Game({ route, navigation }) {
       <View style={styles.answerBoxesContainer}>
         {answerList?.map((char, index) => {
           return <TouchableOpacity
+            key={index}
             style={styles.answerBoxContainer}
             onPress={() => onPressItem(char, index)}>
             <Text style={styles.answerText}>{char?.value}</Text>
@@ -212,14 +211,9 @@ function Game({ route, navigation }) {
           <>
             <QuestionSection />
             <SpaceFiller height={24} />
-            <AnswerBoxes answerList={currentAnswer} onPressItem={onPressCharacter} />
+            <AnswerBoxes answerList={currentAnswer} onPressItem={onPressAnswerCharacter} />
             <SpaceFiller height={backgroundHeight / 3} />
-            <View style={{ marginHorizontal: 16 }}>
-              <Text style={{
-                fontWeight: "bold",
-                fontSize: 20,
-              }}>Option : </Text>
-            </View>
+            <Text style={styles.optionText}>Option : </Text>
             <AnswerBoxes answerList={optionList} onPressItem={onPressOptionCharacter} />
           </>
         ) : (
@@ -266,6 +260,18 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   answerText: { fontWeight: "bold", fontSize: 20 },
+  optionText: {
+    fontWeight: "bold",
+    fontSize: 20,
+    marginHorizontal: 16,
+  },
+  questionText: { color: "white", fontSize: 16 },
+  questionContainer: { marginHorizontal: 16 },
+  questionGameText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 20,
+  },
 });
 
 export default Game;
