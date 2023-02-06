@@ -13,15 +13,15 @@ import {
   Text, View,
 } from "react-native";
 
-import CategoryItem from "./components/CategoryItem";
+import CategoryItem from "../components/CategoryItem";
 import { useNavigation } from "@react-navigation/native";
-import { gameData } from "./data";
-import SpaceFiller from "./components/SpaceFiller";
-import CustomButton from "./components/CustomButton";
-import UserSectionItem from "./components/UserSectionItem";
+import { gameData } from "../data";
+import SpaceFiller from "../components/SpaceFiller";
+import CustomButton from "../components/CustomButton";
+import UserSectionItem from "../components/UserSectionItem";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ContextState } from "./context";
-import { removeCurrentUser, removeLocalStorage } from "./utility";
+import { ContextState } from "../context";
+import { removeCurrentUser, removeLocalStorage } from "../utility";
 
 
 function Home() {

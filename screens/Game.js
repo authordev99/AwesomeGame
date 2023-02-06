@@ -11,7 +11,7 @@ import {
   Text, TouchableOpacity, View,
 } from "react-native";
 
-import { shuffle } from "../utils";
+import { shuffle } from "../utility";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "../components/Header";
 import SpaceFiller from "../components/SpaceFiller";
@@ -26,7 +26,7 @@ const backgroundHeight = 380;
 
 function Game({ route, navigation }) {
   const state = useContext(ContextState);
-  const { category, username } = route.params;
+  const { category } = route.params;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answer, setAnswer] = useState(null);
   const [optionList, setOptionList] = useState(null);
@@ -84,6 +84,7 @@ function Game({ route, navigation }) {
   const onPressButton = async () => {
     const currentUser = JSON.parse(await AsyncStorage.getItem("@user"));
     const selectedAnswer = getSelectedAnswer();
+    const point = category.questions[currentIndex].point;
     const nextIndex = currentIndex + 1;
     let updatedScore = score;
     let updateResult = {};
@@ -95,7 +96,7 @@ function Game({ route, navigation }) {
       if (selectedAnswer?.length === answer?.length) {
         if (selectedAnswer === answer) {
           updateResult = { correct: result.correct + 1 };
-          updatedScore += 100;
+          updatedScore += point;
           setScore(updatedScore);
           setShowScore(true);
           setIsAnswerCorrect(true);
@@ -217,7 +218,7 @@ function Game({ route, navigation }) {
             <AnswerBoxes answerList={optionList} onPressItem={onPressOptionCharacter} />
           </>
         ) : (
-          <EarnScore isAnswerCorrect={isAnswerCorrect} score={isAnswerCorrect ? 100 : 0} />
+          <EarnScore isAnswerCorrect={isAnswerCorrect} score={isAnswerCorrect ? category.questions[currentIndex].point : 0} />
         )}
         <SpaceFiller height={24} />
         <CustomButton

@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
   usernameText: {  fontWeight: "bold", },
   scoreContainer: { backgroundColor: "#5DBC7D", paddingHorizontal: 16, paddingVertical: 8, borderRadius: 16 },
   score: { color: "white", fontWeight: "bold" },
-  categoryImage: {height: 16, width: 16},
-  categoryContainer: {flexDirection: 'row'},
+  categoryImage: {height: 12, width: 12},
+  categoryContainer: {flexDirection: 'row', alignItems: 'center'},
 });
 
 

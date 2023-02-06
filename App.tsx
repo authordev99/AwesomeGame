@@ -4,7 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
 
-import Home from "./Home";
+import Home from "./screens/Home";
 import Game from "./screens/Game";
 import Provider from "./context";
 import Leaderboards from "./screens/Leaderboards";
