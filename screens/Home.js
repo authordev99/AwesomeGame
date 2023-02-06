@@ -15,12 +15,14 @@ import {
 
 import CategoryItem from "../components/CategoryItem";
 import { useNavigation } from "@react-navigation/native";
-import { gameData } from "../data";
+import { gameData } from "../util/data";
 import SpaceFiller from "../components/SpaceFiller";
 import CustomButton from "../components/CustomButton";
 import UserSectionItem from "../components/UserSectionItem";
 import { ContextState } from "../context";
-import { getCurrentUser, removeCurrentUser } from "../utility";
+import { getCurrentUser, removeCurrentUser } from "../util/utility";
+import { FLASHWHITE } from "../util/colors";
+import { ENTER, LEADERBOARDS, LOGIN_ALERT, SELECT_CATEGORY_ALERT } from "../util/strings";
 
 
 function Home() {
@@ -47,13 +49,13 @@ function Home() {
 
   const onPressStartButton = () => {
     if (!state?.user) {
-      Alert.alert("Please login first");
+      Alert.alert(LOGIN_ALERT);
       return;
     }
 
     const selectedCategory = data.find((item) => item.isSelected);
     if (!selectedCategory) {
-      Alert.alert("Please select one category above");
+      Alert.alert(SELECT_CATEGORY_ALERT);
       return;
     }
 
@@ -89,9 +91,9 @@ function Home() {
           return <CategoryItem key={index} data={data} onPress={onPressCategory} />;
         })}
         <SpaceFiller height={24} />
-        <CustomButton text={"Enter"} onPress={onPressStartButton} />
+        <CustomButton text={ENTER} onPress={onPressStartButton} />
         <SpaceFiller height={16} />
-        <CustomButton text={"Leaderboards"} onPress={onPressLeaderboardsButton} />
+        <CustomButton text={LEADERBOARDS} onPress={onPressLeaderboardsButton} />
       </View>
     </SafeAreaView>
   );
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     flex: 1,
-    backgroundColor: "#efeff3",
+    backgroundColor: FLASHWHITE,
   },
   contentContainer: { flex: 1 },
   titleHeader: {

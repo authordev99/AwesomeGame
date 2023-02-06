@@ -7,7 +7,7 @@ export const gameData = [
       { question: "What is the Capital city of Indonesia?", answer: "Jakarta", point: 100 },
       { question: "What is the Capital city of Thailand?", answer: "Bangkok", point: 150 },
     ],
-    image: require("./images/cities.png"), isSelected: false,
+    image: require("../images/cities.png"), isSelected: false,
   },
   {
     id: 2,
@@ -18,7 +18,7 @@ export const gameData = [
       { question: "Which is the only mammal that can fly?", answer: "Bat", point: 100  },
       { question: "What is the largest mammal?", answer: "Whale", point: 100  },
     ],
-    image: require("./images/animals.png"),
+    image: require("../images/animals.png"),
     isSelected: false,
   },
   {
@@ -31,7 +31,7 @@ export const gameData = [
       { question: "What is the main ingredient in cotton candy?", answer: "Sugar", point: 100  },
       { question: "Which food item does Popeye consume to gain strength?", answer: "Spinach", point: 100  },
     ],
-    image: require("./images/food.png"),
+    image: require("../images/food.png"),
     isSelected: false,
   },
 ];

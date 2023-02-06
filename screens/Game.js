@@ -11,7 +11,7 @@ import {
   Text, TouchableOpacity, View,
 } from "react-native";
 
-import { shuffle } from "../utility";
+import { shuffle } from "../util/utility";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Header from "../components/Header";
 import SpaceFiller from "../components/SpaceFiller";
@@ -20,7 +20,9 @@ import CustomImageButton from "../components/CustomImageButton";
 import CustomText from "../components/CustomTitle";
 import EarnScore from "../components/EarnScore";
 import { ContextState } from "../context";
-import { getLeaderboardList, setCurrentUser, setLeaderboardList, updateUserList } from "../utility";
+import { getLeaderboardList, setCurrentUser, setLeaderboardList, updateUserList } from "../util/utility";
+import { EMERALD, FLASHWHITE, JELLYBEAN, TUFTSBLUE } from "../util/colors";
+import { OPTION, SKIP } from "../util/strings";
 
 const backgroundHeight = 380;
 
@@ -72,7 +74,6 @@ function Game({ route, navigation }) {
     setOptionList([...optionList]);
 
     const currentAnswerLength = getCurrentEmptyIndex();
-    console.log("answer = ", answer);
     if (answer?.length > currentAnswerLength) {
       //Set answer
       const index = currentAnswerLength ?? currentAnswerLength + 1;
@@ -120,6 +121,7 @@ function Game({ route, navigation }) {
           totalQuestion: category.questions.length,
           data: category,
           ...finalResult,
+          date: new Date(),
         };
         const leaderboardList = await getLeaderboardList() ?? [];
         const isUserExist = leaderboardList?.findIndex((item) => item.user.username === updatedUser.username);
@@ -128,8 +130,6 @@ function Game({ route, navigation }) {
         } else {
           leaderboardList?.push(summary);
         }
-
-        console.log("summary ", summary)
 
         await updateUser(updatedUser);
         await setLeaderboardList(leaderboardList);
@@ -159,9 +159,9 @@ function Game({ route, navigation }) {
 
   const getButtonStyle = () => {
     const selectedAnswer = getSelectedAnswer();
-    return selectedAnswer?.length === answer?.length ? { title: "NEXT", color: "#5DBC7D" } : {
-      title: "SKIP",
-      color: "#e35d5d",
+    return selectedAnswer?.length === answer?.length ? { title: "NEXT", color: EMERALD } : {
+      title: SKIP,
+      color: JELLYBEAN,
     };
   };
 
@@ -214,7 +214,7 @@ function Game({ route, navigation }) {
             <SpaceFiller height={24} />
             <AnswerBoxes answerList={currentAnswer} onPressItem={onPressAnswerCharacter} />
             <SpaceFiller height={backgroundHeight / 3} />
-            <Text style={styles.optionText}>Option : </Text>
+            <Text style={styles.optionText}>{OPTION} </Text>
             <AnswerBoxes answerList={optionList} onPressItem={onPressOptionCharacter} />
           </>
         ) : (
@@ -234,10 +234,10 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     flex: 1,
-    backgroundColor: "#efeff3",
+    backgroundColor: FLASHWHITE,
   },
   customBackground: {
-    backgroundColor: "#4a90e2",
+    backgroundColor: TUFTSBLUE,
     height: backgroundHeight,
     ...StyleSheet.absoluteFill,
   },

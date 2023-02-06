@@ -1,4 +1,4 @@
-import { getRandomInt, shuffle } from "../utility";
+import { getRandomInt, shuffle } from "../util/utility";
 
 
 test('random character func ensure not undefined', () => {

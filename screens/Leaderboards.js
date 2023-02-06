@@ -15,7 +15,9 @@ import Header from "../components/Header";
 import CustomImageButton from "../components/CustomImageButton";
 import CustomText from "../components/CustomTitle";
 import LeaderboardItem from "../components/LeaderboardItem";
-import { getLeaderboardList } from "../utility";
+import { getLeaderboardList } from "../util/utility";
+import { FLASHWHITE } from "../util/colors";
+import { EMPTY_LIST_STATE, LEADERBOARDS } from "../util/strings";
 
 
 function Leaderboards({ route, navigation }) {
@@ -52,7 +54,7 @@ function Leaderboards({ route, navigation }) {
   const EmptyList = () => {
     return (
       <View style={styles.emptyContainer}>
-        <Text>No data</Text>
+        <Text>{EMPTY_LIST_STATE}</Text>
       </View>
     );
   };
@@ -68,7 +70,7 @@ function Leaderboards({ route, navigation }) {
         }
         headerCenterElement={
           <CustomText
-            text={"Leaderboards"}
+            text={LEADERBOARDS}
             additionalStyle={styles.text}
           />
         }
@@ -87,7 +89,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     flex: 1,
-    backgroundColor: "#efeff3",
+    backgroundColor: FLASHWHITE,
   },
   contentContainerStyle: {
     flex: 1,

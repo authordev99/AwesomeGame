@@ -13,8 +13,9 @@ import {
 import Header from "../components/Header";
 import CustomButton from "../components/CustomButton";
 import CustomImageButton from "../components/CustomImageButton";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ContextState } from "../context";
+import { LOGIN, USERNAME_ALERT, USERNAME_PLACEHOLDER } from "../util/strings";
+import { getUserList, setCurrentUser, setUserList } from "../util/utility";
 
 
 function Username({ route, navigation }) {
@@ -23,11 +24,12 @@ function Username({ route, navigation }) {
 
   const onPress = async () => {
     if (!username) {
-      Alert.alert("Please enter your name");
+      Alert.alert(USERNAME_ALERT);
       return;
     }
 
-    const userList = JSON.parse(await AsyncStorage.getItem("@userList")) ?? [];
+
+    const userList = await getUserList() ?? [];
     let checkUser = userList?.find((item) => {
       return item.username === username;
     });
@@ -37,13 +39,11 @@ function Username({ route, navigation }) {
         username: username,
         score: 0,
       };
-      console.log("checkUser = ",checkUser)
       userList?.push(checkUser);
-      console.log("updatedUserList = ",userList)
-      await AsyncStorage.setItem("@userList", JSON.stringify(userList));
+      await setUserList(userList)
     }
 
-    AsyncStorage.setItem("@user", JSON.stringify(checkUser)).then(() => {
+    setCurrentUser(checkUser).then(() => {
       state.setUser(checkUser)
       navigation.goBack();
     });
@@ -73,10 +73,10 @@ function Username({ route, navigation }) {
           autoFocus={false}
           allowFontScaling={false}
           numberOfLines={1}
-          placeholder={"My name is"}
+          placeholder={USERNAME_PLACEHOLDER}
           onChangeText={onChangeText}
         />
-        <CustomButton text={"Login"} onPress={onPress} additionalStyles={styles.button} />
+        <CustomButton text={LOGIN} onPress={onPress} additionalStyles={styles.button} />
       </View>
     </View>
   );

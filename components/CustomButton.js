@@ -1,7 +1,6 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import SpaceFiller from "./SpaceFiller";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { EMERALD } from "../util/colors";
 
 const CustomButton = ({ text, onPress, additionalStyles }) => {
   return (
@@ -13,7 +12,7 @@ const CustomButton = ({ text, onPress, additionalStyles }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#5DBC7D",
+    backgroundColor: EMERALD,
     borderRadius: 36,
     marginHorizontal: 48,
     alignItems: "center",
