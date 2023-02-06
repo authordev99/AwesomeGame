@@ -73,7 +73,7 @@ function Result({ route, navigation }) {
         <SpaceFiller height={24} />
         <Text style={styles.text}>{data.user.username}</Text>
         <Text style={styles.text}>{TOTAL_SCORE_MSG} {data.finalScore}</Text>
-        <Text style={styles.dateText}>{data.date.toString()}</Text>
+        <Text style={styles.dateText}>{data.date}</Text>
         <SpaceFiller height={24} />
         <View style={styles.summaryContainer}>
           <Text style={styles.summaryText}>summary :</Text>

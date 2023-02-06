@@ -121,7 +121,7 @@ function Game({ route, navigation }) {
           totalQuestion: category.questions.length,
           data: category,
           ...finalResult,
-          date: new Date(),
+          date: new Date().toISOString().split('T')[0],
         };
         const leaderboardList = await getLeaderboardList() ?? [];
         const isUserExist = leaderboardList?.findIndex((item) => item.user.username === updatedUser.username);
