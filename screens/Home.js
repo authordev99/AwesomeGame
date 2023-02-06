@@ -20,7 +20,7 @@ import SpaceFiller from "../components/SpaceFiller";
 import CustomButton from "../components/CustomButton";
 import UserSectionItem from "../components/UserSectionItem";
 import { ContextState } from "../context";
-import { getCurrentUser, removeCurrentUser, removeLocalStorage } from "../utility";
+import { getCurrentUser, removeCurrentUser } from "../utility";
 
 
 function Home() {
@@ -92,8 +92,6 @@ function Home() {
         <CustomButton text={"Enter"} onPress={onPressStartButton} />
         <SpaceFiller height={16} />
         <CustomButton text={"Leaderboards"} onPress={onPressLeaderboardsButton} />
-        {/*<SpaceFiller height={16} />*/}
-        {/*<CustomButton text={"Reset Local Storage"} onPress={removeLocalStorage} />*/}
       </View>
     </SafeAreaView>
   );

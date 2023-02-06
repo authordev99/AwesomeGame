@@ -22,7 +22,6 @@ const LeaderboardItem = ({ item, index, onPress }) => {
           <SpaceFiller width={4} />
           <Text>{`${item?.data?.category}`}</Text>
         </View>
-
       </View>
       <View style={styles.scoreContainer}>
         <Text style={styles.score}>{`${item?.user?.score} pts`}</Text>
