@@ -8,3 +8,8 @@ test('renders correctly', () => {
   const tree = renderer.create(<LeaderboardItem item={mockData} />).toJSON();
   expect(tree).toMatchSnapshot();
 });
+
+test('LeaderboardsItem has 6 child', () => {
+  const tree = renderer.create(<LeaderboardItem />).toJSON();
+  expect(tree.children.length).toBe(6);
+});

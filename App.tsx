@@ -18,7 +18,7 @@ function App(): JSX.Element {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{
           headerShown: false
-        }}>
+        }} initialRouteName="Home">
           <Stack.Screen
             name="Home"
             component={Home}
